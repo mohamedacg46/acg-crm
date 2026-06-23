@@ -13,16 +13,17 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
-      - name: Enable web support
-        run: flutter config --enable-web
-        working-directory: ./frontend
-      - name: Create web directory
-        run: flutter create --platforms web .
-        working-directory: ./frontend
-      - run: flutter pub get
-        working-directory: ./frontend
-      - run: flutter build web --release
-        working-directory: ./frontend
+      - name: Setup frontend
+        run: |
+          mkdir -p frontend
+          cd frontend
+          flutter config --enable-web
+          flutter create --platforms web .
+      - name: Build web
+        run: |
+          cd frontend
+          flutter pub get
+          flutter build web --release
       - uses: actions/upload-artifact@v4
         with:
           name: web-build
